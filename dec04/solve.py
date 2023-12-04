@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from math import prod
-
 
 def tickets():
     return open("input.txt", 'r').readlines()
@@ -10,7 +8,6 @@ def winners(row):
     winners, yours = ticket.split(r'|')
     winning_numbers = set(winners.split())
     my_numbers = set(yours.split())
-    #print (my_numbers, winning_numbers, my_numbers & winning_numbers)
     return my_numbers & winning_numbers
 
 
@@ -27,14 +24,18 @@ def score(winning_numbers):
 def score_of_winners(ticket):
     return score(winners(ticket))
 
-print (sum([score_of_winners(ticket) 
-            for ticket in tickets()]))
+def part1_score():
+    return [score_of_winners(ticket)
+            for ticket in tickets()]
 
-#for ticket in tickets():
-#    w = winners(ticket)
-#    print(score(w), w)
+def part2_score():
+    scores = [1] * len(tickets())
+    for r, ticket in enumerate(tickets()):
+        w = winners(ticket)
+        if w:
+            for c in range(r + 1, min([r +1 + len(w), len(scores)])):
+                scores[c] += scores[r]
+    return scores
 
 
-#print(sum([score(winning_numbers) 
-#      for ticket in tickets() 
-#      for winning_numbers in winners(ticket)]))
+print (sum(part1_score()), sum(part2_score()))
